@@ -1,5 +1,7 @@
 import Place from '../models/Place.js';
 
+// ... (getPlaces, getPlaceById functions remain the same) ...
+
 const getPlaces = async (req, res) => {
   const places = await Place.find({});
   res.json(places);
@@ -15,16 +17,32 @@ const getPlaceById = async (req, res) => {
   }
 };
 
+// --- THIS FUNCTION IS UPDATED ---
 const createPlace = async (req, res) => {
+  try {
     const { name, description, history, images, category, location } = req.body;
+
     const place = new Place({
-        name, description, history, images, category, location
+        name, 
+        description, 
+        history, 
+        images, 
+        category, 
+        location
     });
+
     const createdPlace = await place.save();
     res.status(201).json(createdPlace);
+
+  } catch (error) {
+    // This 'catch' block prevents the server from crashing
+    console.error(error); // This logs the real error in your terminal
+    res.status(400).json({ message: 'Invalid place data provided. Please check all fields.' });
+  }
 };
 
-// This is the new function added for updating a place
+// ... (updatePlace function remains the same) ...
+
 const updatePlace = async (req, res) => {
   const { name, description, history, images, category, location } = req.body;
   
@@ -36,7 +54,10 @@ const updatePlace = async (req, res) => {
     place.history = history || place.history;
     place.images = images || place.images;
     place.category = category || place.category;
-    place.location = location || place.location;
+    
+    if (location) {
+      place.location = { ...place.location, ...location };
+    }
 
     const updatedPlace = await place.save();
     res.json(updatedPlace);
@@ -46,5 +67,4 @@ const updatePlace = async (req, res) => {
   }
 };
 
-// The export statement has been updated to include the new function
 export { getPlaces, getPlaceById, createPlace, updatePlace };

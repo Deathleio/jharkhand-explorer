@@ -8,6 +8,7 @@ const placeSchema = new mongoose.Schema({
   category: { type: String, required: true },
   location: {
     address: String,
+    googleMapsUrl: String, // <<< Add this line
   },
 }, { timestamps: true });
 

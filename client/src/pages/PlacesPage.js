@@ -32,14 +32,35 @@ const PlacesPage = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {places.map((place) => (
-            <Link to={`/place/${place._id}`} key={place._id} className="block bg-white rounded-lg shadow-lg overflow-hidden transform hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-              <img src={place.images[0]} alt={place.name} className="w-full h-56 object-cover"/>
-              <div className="p-6">
+            <div key={place._id} className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transform hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+              <Link to={`/place/${place._id}`} className="block">
+                <img src={place.images[0]} alt={place.name} className="w-full h-56 object-cover"/>
+              </Link>
+              <div className="p-6 flex flex-col flex-grow">
                 <h2 className="text-2xl font-bold mb-2 text-forest-green">{place.name}</h2>
-                <p className="text-gray-600 mb-4">{place.description.substring(0, 120)}...</p>
-                <span className="font-semibold text-leaf-green">Read More &rarr;</span>
+                <p className="text-gray-600 mb-4 flex-grow">{place.description.substring(0, 120)}...</p>
+                <div className="mt-4 flex justify-between items-center">
+                  <Link to={`/place/${place._id}`} className="font-semibold text-leaf-green">
+                    Read More &rarr;
+                  </Link>
+                  {/* --- NEW GOOGLE MAPS LINK --- */}
+                  {place.location.googleMapsUrl && (
+                    <a 
+                      href={place.location.googleMapsUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-stone-gray text-white text-sm font-bold py-2 px-3 rounded-lg hover:bg-black"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      View on Map
+                    </a>
+                  )}
+                </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       )}
